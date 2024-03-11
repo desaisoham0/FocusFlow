@@ -1,0 +1,24 @@
+{
+  "name": "Focusflow.json",
+  "version": "1.0.0",
+  "description": "Focus Promodor webpage",
+  "main": "script.js",
+  "scripts": {
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
+    "start": "node script.js",
+    "deploy": "gh-page -d dist"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://desaisoham0.github.io/FocusFlow"
+  },
+  "keywords": [
+    "[\"pomodoro\"",
+    "\"focus\"",
+    "\"productivity\"",
+    "\"work\"",
+    "\"study\"]"
+  ],
+  "author": "Soham Desai",
+  "license": "ISC"
+}
