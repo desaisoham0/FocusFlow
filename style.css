@@ -1,0 +1,37 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    transition: background-color 0.5s ease;
+    background-color: #f5f5f5; /* Default background */
+}
+
+#pomodoro-timer, #time-tracker {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+#timer-display {
+    font-size: 150px;
+    margin-bottom: 20px;
+}
+
+button, input[type="number"] {
+    margin: 5px;
+    padding: 10px;
+    font-size: 12px;
+}
+
+#instructions p, #time-tracker p {
+    font-size: 20px;
+}
+
+.work-session {
+    background-color: #ffedd5; /* Light orange for work sessions */
+}
+
+.break-session {
+    background-color: #d1e7dd; /* Light green for break sessions */
+}

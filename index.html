@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta viewport="width=device-width, initial-scale=1.0">
+    <title>Enhanced Pomodoro Timer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="instructions">
+        <p>Set work and break durations. Click "Start Work" to begin. The background will change color based on the session type. Time tracked will be displayed below.</p>
+    </div>
+    <div id="pomodoro-timer">
+        <div id="timer-display">25:00</div>
+        <div id="time-inputs">
+            <input type="number" id="work-duration" placeholder="Edit Work Minutes" min="1">
+            <input type="number" id="break-duration" placeholder="Edit Break Minutes" min="1">
+        </div>
+        <button id="start-btn">Start Work</button>
+        <button id="start-break-btn" style="display:none;">Start Break</button>
+        <button id="stop-btn">Stop</button>
+        <button id="reset-btn">Reset</button>
+    </div>
+    <div id="time-tracker">
+        <p id="work-time-tracked">Total Work: 0 minutes</p>
+        <p id="break-time-tracked">Total Break: 0 minutes</p>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
