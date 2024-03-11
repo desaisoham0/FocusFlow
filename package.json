@@ -20,5 +20,8 @@
     "\"study\"]"
   ],
   "author": "Soham Desai",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "gh-pages": "^6.1.1"
+  }
 }
