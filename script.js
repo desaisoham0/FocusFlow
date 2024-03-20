@@ -19,6 +19,7 @@ const workTimeTracked = document.getElementById('work-time-tracked');
 const breakTimeTracked = document.getElementById('break-time-tracked');
 const workTab = document.getElementById('work-tab');
 const breakTab = document.getElementById('break-tab');
+const alarmSound = document.getElementById('alarm-sound');
 
 function updateDisplay(timeInSeconds) {
     const minutes = Math.floor(timeInSeconds / 60);
@@ -84,6 +85,8 @@ function startTimer() {
             updateTimeTracking();
             switchMode(mode === 'work' ? 'break' : 'work'); // Automatically switch modes
             startPauseBtn.textContent = '►'; // Change button to show play symbol
+            // Play the alarm sound when the timer finishes
+            alarmSound.play();
         } else {
             updateDisplay(remainingTime);
         }
