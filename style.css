@@ -26,6 +26,7 @@ button {
     border-radius: 10px;
     background-color:sienna;
     color: whitesmoke;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 input {
@@ -56,6 +57,8 @@ input {
 
 .active-tab {
     font-weight: bold;
-    background-color: #ddd; /* Light grey background for the active tab */
+    background-color: chocolate;
+    color: white;
+    transform: scale(1.05);
 }
 
