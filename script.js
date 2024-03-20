@@ -82,11 +82,11 @@ function startTimer() {
             clearInterval(interval);
             isRunning = false;
             timerStarted = false;
+            // Play the alarm sound when the timer finishes
+            alarmSound.play();
             updateTimeTracking();
             switchMode(mode === 'work' ? 'break' : 'work'); // Automatically switch modes
             startPauseBtn.textContent = '►'; // Change button to show play symbol
-            // Play the alarm sound when the timer finishes
-            alarmSound.play();
         } else {
             updateDisplay(remainingTime);
         }
