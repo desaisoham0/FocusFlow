@@ -1,8 +1,11 @@
 let isRunning = false;
+let timerStarted = false; // Indicates if the timer has been started at least once
+let startTime;
+let remainingTime;
 let interval;
-let mode = 'work'; // 'work' or 'break'
-let workDuration = 25 * 60; // Default 25 minutes
-let breakDuration = 5 * 60; // Default 5 minutes
+let mode = 'work'; // Initial mode
+let workDuration = 25 * 60;
+let breakDuration = 5 * 60;
 let totalWorkTime = 0;
 let totalBreakTime = 0;
 
@@ -10,90 +13,134 @@ const body = document.body;
 const display = document.getElementById('timer-display');
 const workInput = document.getElementById('work-duration');
 const breakInput = document.getElementById('break-duration');
-const startBtn = document.getElementById('start-btn');
-const startBreakBtn = document.getElementById('start-break-btn');
-const stopBtn = document.getElementById('stop-btn');
+const startPauseBtn = document.getElementById('start-pause-btn');
 const resetBtn = document.getElementById('reset-btn');
 const workTimeTracked = document.getElementById('work-time-tracked');
 const breakTimeTracked = document.getElementById('break-time-tracked');
+const workTab = document.getElementById('work-tab');
+const breakTab = document.getElementById('break-tab');
 
-function updateDisplay(seconds) {
-    let minutes = Math.floor(seconds / 60);
-    seconds %= 60;
-    let timeString = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    display.textContent = timeString;
-    document.title = timeString + " - " + (mode === 'work' ? "Work Time" : "Break Time"); // Update tab title
+function updateDisplay(timeInSeconds) {
+    const minutes = Math.floor(timeInSeconds / 60);
+    const seconds = timeInSeconds % 60;
+    display.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
 }
 
-function startTimer(duration) {
-    if (isRunning) return;
+function switchMode(newMode) {
+    mode = newMode;
+    body.className = newMode + '-session'; // Change body class for background color
+    // Update durations based on inputs
+    workDuration = parseInt(workInput.value) * 60 || 25 * 60;
+    breakDuration = parseInt(breakInput.value) * 60 || 5 * 60;
+    updateDisplay(newMode === 'work' ? workDuration : breakDuration);
+    
+    if (newMode === 'work') {
+        workInput.style.display = '';
+        breakInput.style.display = 'none';
+        workTab.classList.add('active-tab');
+        breakTab.classList.remove('active-tab');
+    } else {
+        workInput.style.display = 'none';
+        breakInput.style.display = '';
+        workTab.classList.remove('active-tab');
+        breakTab.classList.add('active-tab');
+    }
+}
+
+function updateTimeTracking() {
+    const elapsedSeconds = ((Date.now() - startTime) / 1000).toFixed(0);
+    const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+
+    if (mode === 'work') {
+        totalWorkTime += elapsedMinutes;
+        workTimeTracked.textContent = `Total Work: ${totalWorkTime} minutes`;
+    } else {
+        totalBreakTime += elapsedMinutes;
+        breakTimeTracked.textContent = `Total Break: ${totalBreakTime} minutes`;
+    }
+}
+
+function startTimer() {
+    // Update durations based on inputs right before starting the timer
+    workDuration = parseInt(workInput.value) * 60 || 25 * 60;
+    breakDuration = parseInt(breakInput.value) * 60 || 5 * 60;
+
+    if (!timerStarted || !isRunning) {
+        startTime = Date.now();
+        remainingTime = mode === 'work' ? workDuration : breakDuration;
+        timerStarted = true;
+    }
+    
     isRunning = true;
-    body.className = mode === 'work' ? 'work-session' : 'break-session';
-    updateDisplay(duration);
+    startPauseBtn.textContent = '⏸'; // Change button to show pause symbol
     interval = setInterval(() => {
-        if (duration <= 0) {
+        const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+        remainingTime = (mode === 'work' ? workDuration : breakDuration) - elapsedSeconds;
+        
+        if (remainingTime <= 0) {
             clearInterval(interval);
             isRunning = false;
-            if (mode === 'work') {
-                totalWorkTime += parseInt(workInput.value) || 25;
-                workTimeTracked.textContent = `Total Work: ${totalWorkTime} minutes`;
-            } else {
-                totalBreakTime += parseInt(breakInput.value) || 5;
-                breakTimeTracked.textContent = `Total Break: ${totalBreakTime} minutes`;
-            }
-            alert(`Time is up! Start your ${mode === 'work' ? 'break' : 'work'} now.`);
-            toggleMode();
-            return;
+            timerStarted = false;
+            updateTimeTracking();
+            switchMode(mode === 'work' ? 'break' : 'work'); // Automatically switch modes
+            startPauseBtn.textContent = '►'; // Change button to show play symbol
+        } else {
+            updateDisplay(remainingTime);
         }
-        duration--;
-        updateDisplay(duration);
     }, 1000);
 }
 
-function stopTimer() {
-    if (!isRunning) return;
+
+function pauseTimer() {
     clearInterval(interval);
     isRunning = false;
-    document.title = "Pomodoro Timer";
+    startPauseBtn.textContent = '►'; // Change button to show play symbol
+    const elapsedSeconds = ((Date.now() - startTime) / 1000).toFixed(0);
+    remainingTime -= elapsedSeconds; // Adjust remaining time based on pause
 }
 
 function resetTimer() {
-    stopTimer();
-    mode = 'work';
-    updateDisplay(workDuration);
-    toggleButtons(true);
-    document.title = "Pomodoro Timer";
-    body.className = ''; // Reset background color
-}
-
-function toggleMode() {
-    if (mode === 'work') {
-        mode = 'break';
-        startTimer(breakDuration);
-    } else {
-        mode = 'work';
-        startTimer(workDuration);
+    if (timerStarted) {
+        updateTimeTracking(); // Update time tracking with the current session before resetting
     }
-    toggleButtons(false);
+    clearInterval(interval);
+    isRunning = false;
+    timerStarted = false;
+    updateDisplay(mode === 'work' ? workDuration : breakDuration);
+    startPauseBtn.textContent = '►'; // Reset button to show play symbol
 }
 
-function toggleButtons(isWork) {
-    startBtn.style.display = isWork ? '' : 'none';
-    startBreakBtn.style.display = isWork ? 'none' : '';
-}
+// Event listeners for tab switches
+workTab.addEventListener('click', () => switchMode('work'));
+breakTab.addEventListener('click', () => switchMode('break'));
 
-startBtn.addEventListener('click', () => {
-    workDuration = (workInput.value || 25) * 60;
-    startTimer(workDuration);
+// Start/Pause button toggles timer state
+startPauseBtn.addEventListener('click', () => {
+    if (isRunning) {
+        pauseTimer();
+    } else {
+        startTimer();
+    }
 });
 
-startBreakBtn.addEventListener('click', () => {
-    breakDuration = (breakInput.value || 5) * 60;
-    startTimer(breakDuration);
+workInput.addEventListener('change', () => {
+    workDuration = parseInt(workInput.value) * 60 || 25 * 60;
+    if (mode === 'work') {
+        updateDisplay(workDuration);
+    }
 });
 
-stopBtn.addEventListener('click', stopTimer);
+breakInput.addEventListener('change', () => {
+    breakDuration = parseInt(breakInput.value) * 60 || 5 * 60;
+    if (mode === 'break') {
+        updateDisplay(breakDuration);
+    }
+});
+
+
+// Reset button functionality
 resetBtn.addEventListener('click', resetTimer);
 
 // Initialize
 updateDisplay(workDuration);
+switchMode('work');
