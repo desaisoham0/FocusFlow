@@ -6,11 +6,11 @@
   "scripts": {
     "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
     "start": "node script.js",
-    "deploy": "gh-pages -d ."
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
-    "url": "https://desaisoham0.github.io/FocusFlow"
+    "url": "https://github.com/desaisoham0/FocusFlow.git"
   },
   "keywords": [
     "[\"pomodoro\"",
