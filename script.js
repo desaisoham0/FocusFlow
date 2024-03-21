@@ -54,10 +54,16 @@ function updateTimeTracking() {
 
     if (mode === 'work') {
         totalWorkTime += elapsedMinutes;
-        workTimeTracked.textContent = `Total Work: ${totalWorkTime} minutes`;
+        // Convert minutes to hours and minutes
+        let workHours = Math.floor(totalWorkTime / 60);
+        let workMinutes = totalWorkTime % 60;
+        workTimeTracked.textContent = `Total Work: ${workHours} hours and ${workMinutes} minutes`;
     } else {
         totalBreakTime += elapsedMinutes;
-        breakTimeTracked.textContent = `Total Break: ${totalBreakTime} minutes`;
+        // Convert minutes to hours and minutes
+        let breakHours = Math.floor(totalBreakTime / 60);
+        let breakMinutes = totalBreakTime % 60;
+        breakTimeTracked.textContent = `Total Break: ${breakHours} hours and ${breakMinutes} minutes`;
     }
 }
 
