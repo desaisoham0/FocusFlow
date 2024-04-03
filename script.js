@@ -24,7 +24,9 @@ const alarmSound = document.getElementById('alarm-sound');
 function updateDisplay(timeInSeconds) {
     const minutes = Math.floor(timeInSeconds / 60);
     const seconds = timeInSeconds % 60;
-    display.textContent = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    const formattedTime = `${minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+    display.textContent = formattedTime;
+    document.title = `(${formattedTime}) ${mode.charAt(0).toUpperCase() + mode.slice(1)} Time - Pomodoro`;
 }
 
 function switchMode(newMode) {
@@ -93,6 +95,7 @@ function startTimer() {
             updateTimeTracking();
             switchMode(mode === 'work' ? 'break' : 'work'); // Automatically switch modes
             startPauseBtn.textContent = '►'; // Change button to show play symbol
+            document.title = "Pomodoro Timer";
         } else {
             updateDisplay(remainingTime);
         }
@@ -117,6 +120,7 @@ function resetTimer() {
     timerStarted = false;
     updateDisplay(mode === 'work' ? workDuration : breakDuration);
     startPauseBtn.textContent = '►'; // Reset button to show play symbol
+    document.title = "Pomodoro Timer";
 }
 
 // Event listeners for tab switches
