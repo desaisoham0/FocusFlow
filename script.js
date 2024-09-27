@@ -3,7 +3,7 @@ let timerStarted = false; // Indicates if the timer has been started at least on
 let startTime;
 let remainingTime;
 let interval;
-let mode = 'work'; // Initial mode
+let mode = 'work';
 let workDuration = 25 * 60;
 let breakDuration = 5 * 60;
 let totalWorkTime = 0;
